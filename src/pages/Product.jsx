@@ -1,38 +1,45 @@
-import React from "react";
-import Counter from "../components/Counter/Counter";
+import React, { useState, useEffect } from "react";
+import api from "../Api";
+import { useParams } from "react-router-dom";
 
 const Page = (props) => {
+	const { id } = useParams();
+	const [product, getProduct] = useState({});
+	useEffect(() => {
+		api.getSingleProduct(id).then((ans) => {
+			getProduct(ans);
+		});
+	}, []);
+
+	const setCart = (e) => {
+		let arr = [...props.store];
+		let flag = true;
+		arr.forEach((el) => {
+			if (el.id === id) {
+				el.cnt++;
+				flag = false;
+			}
+		});
+		if (flag) {
+			arr.push({ id: id, cnt: 1 });
+		}
+		props.updateStore(arr);
+	};
+
 	return (
-		<div>
-			<h1>{props.name}</h1>
-			<h1>Название продукта</h1>
-			<h3>
-				Артикул: 0000000 *****
-				<a href="/">отзывы</a>
-			</h3>
-			<img alt="Изображение товара" />
-			<div className="about">
-				<h2>Описание</h2>
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-					Tempore autem laboriosam ipsa possimus quis officia quos
-					accusantium impedit nostrum illum dolorum, eveniet rerum,
-					dolore mollitia quas alias nulla cum debitis.
-				</p>
+		<div className="product-container">
+			<div
+				className="product__pic"
+				style={
+					product.pictures && {
+						backgroundImage: `url(${product.pictures})`,
+					}
+				}
+			></div>
+			<div>
+				<h1>{product.name || "Нет информации о товаре"}</h1>
+				<button onClick={setCart}>Добавить в корзину</button>
 			</div>
-			<div className="specifications">
-				<p>вес</p>
-				<p>Цена</p>
-				<p>Польза</p>
-			</div>
-			<div className="reviews">
-				<h2>Отзывы</h2>
-			</div>
-			<Counter />
-			<button type="yellow">В корзину</button>
-			<button className="inFavorites">В избранное</button>
-			<div className="tratsport">Инфо о доставке</div>
-			<div className="assurance">Гарантии качества</div>
 		</div>
 	);
 };

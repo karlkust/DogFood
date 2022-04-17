@@ -17,6 +17,7 @@ import Modal from './components/Modal/Modal.jsx';
 
 function App () {
 
+        const [store, updateStore] = useState([]);
         const [searchText, setSearch] = useState('');
         const [data, setData] = useState([]);
         const [goods, setGoods] = useState(data);
@@ -45,6 +46,7 @@ function App () {
             appHandler={search}
             modalActivity={modalActivity}
             setModalActivity={setModalActivity}
+            store={store}
             />
                 <main>
                     <Routes>
@@ -58,7 +60,7 @@ function App () {
                             
                         <Route path='/main' element={<Main name='Главная' />} />
                             
-                        <Route path='/product' element={<Product name='Товары' />} />
+                        <Route path='/product/:id' element={<Product store={store} updateStore={updateStore} />} />
                             
                         <Route path='/profile' element={<Profile name='Личный кабинет' />} />
                     </Routes>

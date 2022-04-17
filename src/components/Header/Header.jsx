@@ -10,6 +10,7 @@ const Header = function ({
 	appHandler,
 	modalActivity,
 	setModalActivity,
+	store,
 }) {
 	const searchHandler = (inpVal) => {
 		console.log("header", inpVal);
@@ -20,7 +21,10 @@ const Header = function ({
 		// e.preventDefault();
 		setModalActivity(!modalActivity);
 	};
-
+	let cnt = 0;
+	store.forEach((el) => {
+		cnt += el.cnt || 0;
+	});
 	return (
 		<header>
 			<div className="container">
@@ -29,7 +33,9 @@ const Header = function ({
 
 				<nav style={{ display: "flex", gap: "10px" }}>
 					<Link to="/favorites">Избранное</Link>
-					<Link to="/cart">Корзина</Link>
+					<Link to="/cart" title={cnt}>
+						Корзина
+					</Link>
 					<Link to="/profile">Профиль</Link>
 					<Link to="/login" onClick={clickHandler}>
 						SignIn
